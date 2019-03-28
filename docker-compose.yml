@@ -1,0 +1,81 @@
+version: "2.1"
+
+
+x-defaults: &defaults
+  logging:
+    driver: "json-file"
+    options:
+      max-size: 1k
+      max-file: '3'
+      mode: non-blocking
+  healthcheck:
+    interval: 1s
+    timeout: 5s
+    retries: 20
+  restart: unless-stopped
+  
+  
+services:
+
+  nginx:
+    <<: *defaults
+    build: ./nginx
+    image: jcbelanger/starter-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+     - certbot-certs:/etc/letsencrypt
+     - certbot-challenges:/usr/share/nginx/html:ro
+     - django-static:/static:ro
+     - django-media:/media:ro
+    links:
+     - django
+    environment:
+     - DOMAIN=${DOMAIN}
+
+  redis:
+    <<: *defaults
+    image: redis
+    healthcheck:
+      test: "[ $$(redis-cli ping) = 'PONG' ]"
+
+  django:
+    <<: *defaults
+    build: ./django
+    image: jcbelanger/starter-django
+    volumes:
+     #- ./django/app:/code/app
+     - django-static:/static
+     - django-media:/media
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+     - DEBUG=${DEBUG}
+     - SECRET_KEY=${SECRET_KEY}
+     - POSTGRES_USER=${POSTGRES_USER}
+     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+     - POSTGRES_DB=${POSTGRES_DB}
+     - DOMAIN=${DOMAIN}
+
+  postgres:
+    <<: *defaults
+    image: postgres
+    volumes:
+     - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: "PGPASSWORD='${POSTGRES_PASSWORD}'; pg_isready --username '${POSTGRES_USER}' --dbname '${POSTGRES_DB}'"
+    environment:
+     - POSTGRES_USER=${POSTGRES_USER}
+     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+     - POSTGRES_DB=${POSTGRES_DB}
+
+volumes:
+  certbot-certs:
+  certbot-challenges:
+  django-static:
+  django-media:
+  postgres-data:
