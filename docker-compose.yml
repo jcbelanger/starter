@@ -33,6 +33,7 @@ services:
      - django
     environment:
      - DOMAIN=${DOMAIN}
+     - ADMIN_EMAIL=${ADMIN_EMAIL}
 
   redis:
     <<: *defaults
