@@ -21,6 +21,7 @@ docker run \
 		--domain ${DOMAIN} \
 		--domain www.${DOMAIN} \
 		--domain static.${DOMAIN} \
+		--domain mail.${DOMAIN} \
 		$( (("$DEBUG" == "1")) && echo "--dry-run" ) \
 		"$@"
 #		--post-hook "cd "$PARENT_DIR" && ls" #docker-compose kill -s SIGHUP nginx"

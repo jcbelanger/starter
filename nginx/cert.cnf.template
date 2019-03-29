@@ -5,7 +5,7 @@ req_extensions = v3_req
 
 [ server_distinguished_name ]
 commonName = ${DOMAIN}
-stateOrProvinceName = NSW
+stateOrProvinceName = ME
 countryName = US
 emailAddress = ${ADMIN_EMAIL}
 organizationName = OrgName
@@ -20,3 +20,4 @@ subjectAltName = @alt_names
 DNS.0 = ${DOMAIN}
 DNS.1 = www.${DOMAIN}
 DNS.2 = static.${DOMAIN}
+DNS.3 = mail.${DOMAIN}
