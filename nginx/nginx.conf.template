@@ -29,21 +29,24 @@ http {
     listen 80;
     listen [::]:80;
 
-    server_name ${DOMAIN} www.${DOMAIN} localhost [::] 127.0.0.1;
+    server_name ${DOMAIN} www.${DOMAIN} static.${DOMAIN} localhost [::] 127.0.0.1;
 
     location ^~ /.well-known/ {
-	  allow all;
-      alias /usr/share/nginx/html/.well-known/;
+      allow all;
+      default_type "text/plain";
+      alias /data/letsencrypt/.well-known/;
     }
 
-    return 301 https://$host$request_uri;
+    location / {
+      return 301 https://$host$request_uri;
+    }
   }
 
   server {
     listen 443 http2 ssl;
     listen [::]:443 http2 ssl;
 
-    server_name ${DOMAIN} www.${DOMAIN} localhost [::] 127.0.0.1;
+    server_name ${DOMAIN} www.${DOMAIN} static.${DOMAIN} localhost [::] 127.0.0.1;
 
     ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
@@ -61,15 +64,12 @@ http {
 
     location /media/  {
       expires 1h;
-      gzip on;
       alias /media/;
     }
 
     location /static/ {
       expires max;
-      gzip on;
       #gzip_static on;
-      access_log off;
       alias /static/;
       try_files $uri @django-static;
     }

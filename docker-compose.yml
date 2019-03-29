@@ -22,11 +22,11 @@ services:
     build: ./nginx
     image: jcbelanger/starter-nginx
     ports:
-      - "80:80"
-      - "443:443"
+     - "80:80"
+     - "443:443"
     volumes:
      - certbot-certs:/etc/letsencrypt
-     - certbot-challenges:/usr/share/nginx/html:ro
+     - certbot-challenges:/data/letsencrypt
      - django-static:/static:ro
      - django-media:/media:ro
     links:
@@ -45,7 +45,7 @@ services:
     build: ./django
     image: jcbelanger/starter-django
     volumes:
-     #- ./django/app:/code/app
+     - ./django/app:/code/app
      - django-static:/static
      - django-media:/media
     depends_on:
