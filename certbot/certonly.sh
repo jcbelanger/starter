@@ -7,7 +7,8 @@ PARENT_DIR=$(dirname "$(readlink -f "$0")")/../
 source ${PARENT_DIR}/.env
 
 docker run \
-	-it \
+	--interactive \
+	--tty \
 	--rm \
 	--volume starter_certbot-certs:/etc/letsencrypt \
 	--volume starter_certbot-challenges:/data/letsencrypt \
