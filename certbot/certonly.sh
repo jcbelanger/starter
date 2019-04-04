@@ -21,7 +21,6 @@ docker run \
 		--email ${ADMIN_EMAIL} \
 		--domain ${DOMAIN} \
 		--domain www.${DOMAIN} \
-		--domain static.${DOMAIN} \
 		--domain mail.${DOMAIN} \
 		"$@"
 

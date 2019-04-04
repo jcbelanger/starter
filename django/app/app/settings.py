@@ -28,15 +28,6 @@ SECRET_KEY = os.environ['SECRET_KEY'] #avoid using getenv to fail loudly
 DEBUG = os.getenv('DEBUG', default='0') == '1'
 
 
-DOMAIN = os.getenv('DOMAIN')
-
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', 'django']
-if DOMAIN is not None:
-    ALLOWED_HOSTS.append(DOMAIN)
-    ALLOWED_HOSTS.append('www.' + DOMAIN)
-
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -46,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	'django.contrib.sites',
+	'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +56,9 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+			os.path.join(BASE_DIR, 'templates'),
+		],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,6 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+MIGRATION_MODULES = {
+    'sites': 'app.fixtures.sites_migrations',
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -125,6 +123,15 @@ USE_I18N = False
 USE_L10N = False
 
 USE_TZ = True
+
+SITE_ID = 1
+
+DOMAIN = os.getenv('DOMAIN')
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', 'django']
+if DOMAIN is not None:
+    ALLOWED_HOSTS.append(DOMAIN)
+    ALLOWED_HOSTS.append(f'www.{DOMAIN}')
 
 CSRF_TRUSTED_ORIGINS = ['.localhost', '.127.0.0.1', '.[::1]']
 if DOMAIN is not None:
@@ -146,6 +153,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 STATIC_URL = '/static/'
 STATIC_ROOT = '/static'
+STATICFILES_DIRS = [
+	os.path.join(BASE_DIR, 'static'),
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/media'
@@ -190,3 +200,7 @@ LOGGING = {
         },
     },
 }
+
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
+if ADMIN_EMAIL is not None:
+	ADMINS = [('Admin', ADMIN_EMAIL)]

@@ -19,5 +19,4 @@ subjectAltName = @alt_names
 [ alt_names ]
 DNS.0 = ${DOMAIN}
 DNS.1 = www.${DOMAIN}
-DNS.2 = static.${DOMAIN}
-DNS.3 = mail.${DOMAIN}
+DNS.1 = mail.${DOMAIN}

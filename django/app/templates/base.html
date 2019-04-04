@@ -1,0 +1,23 @@
+{% spaceless %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>{% block title %}Jim's Demo{% endblock %}</title>
+	<link rel="stylesheet" href="{% static 'bootstrap-4.3.1-dist/css/bootstrap.min.css' %}">
+	{% block styles %}{% endblock %}
+</head>
+<body>
+    {% include 'navbar.html' %}
+	<div class="container">
+		{% block content %}{% endblock content %}
+	</div>
+	<script src="{% static 'jquery-3.3.1.slim.min.js' %}" defer></script>
+	<script src="{% static 'popper-1.14.1.min.js' %}" defer></script>
+	<script src="{% static 'bootstrap-4.3.1-dist/js/bootstrap.min.js' %}" defer></script>
+	{% block scripts %}{% endblock %}
+</body>
+</html>
+{% endspaceless %}
