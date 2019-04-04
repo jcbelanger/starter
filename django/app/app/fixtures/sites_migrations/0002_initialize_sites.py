@@ -16,9 +16,9 @@ def forward(apps, schema_editor):
 def reverse(apps, schema_editor):
     Site = apps.get_model("sites", "Site")
     db_alias = schema_editor.connection.alias
-    s = Site.objects.using(db_alias).get(pk=1)
-    s.name = ORIG_APP_NAME
-    s.domain = ORIG_APP_NAME
+    s = Site.objects.using(db_alias).get(pk=settings.SITE_ID)
+    s.name = 'example.com'
+    s.domain = 'example.com'
     s.save()
 
 
