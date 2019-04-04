@@ -10,6 +10,6 @@ COPY requirements.txt /code
 RUN pip install --no-cache-dir --requirement /code/requirements.txt
 COPY ./app /code/app
 
-CMD python manage.py collectstatic --no-input && \
-	python manage.py migrate && \
-	gunicorn --config gunicorn.py app.wsgi:aioapp
+CMD python3 manage.py collectstatic --no-input && \
+	python3 manage.py migrate && \
+	gunicorn --config gunicorn.py app.aio:aioapp;

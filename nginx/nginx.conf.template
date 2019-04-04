@@ -3,6 +3,7 @@ user nobody nogroup;
 worker_processes auto;
 events {
   worker_connections 4096;
+  use epoll;
 }
 
 http {
@@ -56,6 +57,8 @@ http {
     proxy_set_header Host $http_host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
+	
+	include mime.types;
 
     location /health-check {
       access_log off;
