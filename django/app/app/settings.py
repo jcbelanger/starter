@@ -49,7 +49,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -157,13 +156,13 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 STATIC_URL = '/static/'
-STATIC_ROOT = '/static'
+STATIC_ROOT = '/usr/src/static'
 STATICFILES_DIRS = [
 	os.path.join(BASE_DIR, 'static'),
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/media'
+MEDIA_ROOT = '/usr/src/media'
 
 CACHES = {
     "default": {
@@ -214,10 +213,12 @@ if ADMIN_EMAIL is not None:
 if DEBUG:
 	INSTALLED_APPS += (
 		'debug_toolbar',
-		'mail_panel',
+		#'mail_panel',
 		'template_profiler_panel',
 	)
-	MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+	#MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+	
+	MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 	DEBUG_TOOLBAR_PANELS = [
 		'debug_toolbar.panels.versions.VersionsPanel',
@@ -236,8 +237,7 @@ if DEBUG:
 		'template_profiler_panel.panels.template.TemplateProfilerPanel',
 	]
 	DEBUG_TOOLBAR_CONFIG = {
-		'SHOW_TOOLBAR_CALLBACK' : lambda request: DEBUG,
+		'SHOW_TOOLBAR_CALLBACK' : lambda request: DEBUG and request.user.is_superuser,
 	}
-
 
 	EMAIL_BACKEND = 'mail_panel.backend.MailToolbarBackend'

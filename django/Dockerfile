@@ -2,13 +2,13 @@ FROM python:3
 ENV PYTHONUNBUFFERED 1
 
 EXPOSE 8000
-VOLUME /static
-VOLUME /media
-WORKDIR /code/app
+VOLUME /usr/src/media
+VOLUME /usr/src/static
+WORKDIR /usr/src/app
 
-COPY requirements.txt /code
-RUN pip install --no-cache-dir --requirement /code/requirements.txt
-COPY ./app /code/app
+COPY requirements.txt /usr/src
+RUN pip install --no-cache-dir --requirement /usr/src/requirements.txt
+COPY ./app /usr/src/app
 
 CMD python3 manage.py collectstatic --no-input && \
 	python3 manage.py migrate && \
