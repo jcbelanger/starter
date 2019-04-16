@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import sys
+from django.urls import reverse_lazy
+from django.contrib.messages import constants as messages
+from collections import defaultdict
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,6 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 	'django.contrib.sites',
 	'django.contrib.sitemaps',
+	
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+	'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -52,18 +62,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'app.urls'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        #'APP_DIRS': True,
+		'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
         'OPTIONS': {
-			'loaders': [
-				('django.template.loaders.cached.Loader', [
-					'django.template.loaders.filesystem.Loader',
-					'django.template.loaders.app_directories.Loader',
-				]),
-			],
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -209,11 +214,27 @@ ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
 if ADMIN_EMAIL is not None:
 	ADMINS = [('Admin', ADMIN_EMAIL)]
 
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+LOGIN_REDIRECT_URL = reverse_lazy('index')
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
 
 if DEBUG:
 	INSTALLED_APPS += (
 		'debug_toolbar',
-		#'mail_panel',
+		'mail_panel',
 		'template_profiler_panel',
 	)
 	#MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')

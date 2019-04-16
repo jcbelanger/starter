@@ -30,7 +30,7 @@ http {
     listen 80;
     listen [::]:80;
 
-    server_name ${DOMAIN} www.${DOMAIN} localhost [::] 127.0.0.1;
+    server_name ${DOMAIN} www.${DOMAIN} mail.${DOMAIN} localhost [::] 127.0.0.1;
 
     location ^~ /.well-known/ {
       allow all;

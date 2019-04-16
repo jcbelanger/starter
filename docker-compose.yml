@@ -20,7 +20,6 @@ services:
   nginx:
     <<: *defaults
     build: ./nginx
-    image: jcbelanger/starter-nginx
     ports:
      - "80:80"
      - "443:443"
@@ -44,7 +43,6 @@ services:
   django:
     <<: *defaults
     build: ./django
-    image: jcbelanger/starter-django
     volumes:
      - ./django/app:/code/app
      - django-static:/static
