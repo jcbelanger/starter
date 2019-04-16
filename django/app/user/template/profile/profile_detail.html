@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load static %}
+
+
+{% block title %}{{ profle.user.username }} | Users | {{ block.super }}{% endblock %}
+
+{% block content %}
+    <h1>
+        {% if profile.user.get_full_name %}
+            {{ profile.user.get_full_name }}
+        {% else %}
+            {{ profile.user.username }}
+        {% endif %}
+    </h1>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 clearfix">
+                <dl class="dl-horizontal">
+                    <dt>Username</dt>
+                    <dd>{{ profile.user.username }}</dd>
+                    <dt>Community</dt>
+                    {% if profile.community %}
+                        <dd><a href="{{ profile.community.get_absolute_url }}">{{ profile.community.title }}</a></dd>
+                    {% elif request.user.pk == profile.user.pk %}
+                        <dd>None, <a href="{% url 'community:community-index' %}">Find a community!</a></dd>
+                    {% else %}
+                        <dd>None</dd>
+                    {% endif %}
+                    <dt>Rank</dt>
+                    <dd><a href="{{ profile.get_rank_url }}">{{ profile.get_rank | ordinal }}</a></dd>
+                    <dt>Points</dt>
+                    <dd>{{ profile.get_points | intcomma }}</dd>
+                    <dt>Joined</dt>
+                    <dd>{{ profile.user.date_joined | naturaltime }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+{% endblock %}

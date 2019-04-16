@@ -26,8 +26,8 @@ services:
     volumes:
      - certbot-certs:/etc/letsencrypt
      - certbot-challenges:/data/letsencrypt
-     - django-static:/static:ro
-     - django-media:/media:ro
+     - django-static:/usr/src/static:ro
+     - django-media:/usr/src/media:ro
     links:
      - django
     environment:
@@ -44,9 +44,9 @@ services:
     <<: *defaults
     build: ./django
     volumes:
-     - ./django/app:/code/app
-     - django-static:/static
-     - django-media:/media
+     - ./django/app:/usr/src/app
+     - django-static:/usr/src/static
+     - django-media:/usr/src/media
     depends_on:
       postgres:
         condition: service_healthy

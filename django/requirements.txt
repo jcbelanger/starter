@@ -11,3 +11,4 @@ django-debug-toolbar~=1.11
 django-mail-panel~=1.2
 django-debug-toolbar-template-profiler~=1.0
 django-allauth~=0.39
+Pillow~=6.0
