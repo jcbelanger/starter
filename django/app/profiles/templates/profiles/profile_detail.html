@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load static %}
+
+
+{% block title %}{{ profile.user.username }} | Profiles | {{ block.super }}{% endblock %}
+
+{% block content %}
+    <h1>
+        {% if profile.user.get_full_name %}
+            {{ profile.user.get_full_name }} ({{ profile.user.username }})
+        {% else %}
+            {{ profile.user.username }}
+        {% endif %}
+    </h1>
+	<div class='float-right'>
+	</div>
+    <div class="container-fluid">
+		<div class="row">
+			{% if profile.image %}
+				<div class="col-sm">
+					<img class="img-fluid" src="{{ profile.image.url }}" alt="User profile image for {{ profile.user.username }}">
+				</div>
+			{% endif %}
+			<div class="col-sm">
+				<dl class="row">
+					<dt class="col-sm-3 text-sm-right">Username</dt>
+					<dd class="col-sm-9">{{ profile.user.username }}</dd>
+					{% if profile.user.get_full_name %}
+						<dt class="col-sm-3 text-sm-right">Name</dt>
+						<dd class="col-sm-9">{{ profile.user.get_full_name }}</dd>
+					{% endif %}
+					<dt class="col-sm-3 text-sm-right">Status</dt>
+					<dd class="col-sm-9">
+						{% if profile.user.is_superuser %}
+							<span class="badge badge-pill badge-primary">Superuser</span>
+						{% endif %}
+						{% if profile.user.is_staff %}
+							<span class="badge badge-pill badge-info">Staff</span>
+						{% endif %}
+						{% if profile.user.is_active %}
+							<span class="badge badge-pill badge-success">Active</span>
+						{% else %}
+							<span class="badge badge-pill badge-danger">Inactive</span>
+						{% endif %}
+					</dd>
+					<dt class="col-sm-3 text-sm-right">Last Login</dt>
+					<dd class="col-sm-9">{{ profile.user.last_login | naturaltime }}</dd>
+					<dt class="col-sm-3 text-sm-right">Joined</dt>
+					<dd class="col-sm-9">{{ profile.user.date_joined | naturaltime }}</dd>
+				</dl>
+			</div>
+		</div>
+    </div>
+{% endblock %}

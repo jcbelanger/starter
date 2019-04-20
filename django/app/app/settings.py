@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 	'django.contrib.sites',
 	'django.contrib.sitemaps',
+	'django.contrib.humanize',
 	
     'allauth',
     'allauth.account',
@@ -50,8 +51,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
 	'allauth.socialaccount.providers.google',
 	
-	
-    'user.apps.UserConfig',
+    'profiles.apps.ProfilesConfig',
 ]
 
 MIDDLEWARE = [
