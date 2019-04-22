@@ -1,17 +1,35 @@
 {% spaceless %}
 {% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>{% block title %}Jim's Demo{% endblock %}</title>
+	<title>{% block title %}{%trans 'Demo' %}{% endblock %}</title>
 	<link rel="stylesheet" href="{% static 'bootstrap-4.3.1-dist/css/bootstrap.min.css' %}">
 	{% block styles %}{% endblock %}
 </head>
 <body>
     {% include 'navbar.html' %}
 	<div class="container py-3">
+	
+		<nav aria-label="{% trans 'breadcrumb' %}">
+		  <ol class="breadcrumb">
+			{% block breadcrumbs %}
+				{% with crumb_text=_('Home') %}
+					{% if request.resolver_match.view_name == 'index' %}
+						{% include 'partials/current_crumb.html' %}
+					{% else %}
+						{% url 'index' as crumb_link %}
+						{% include 'partials/parent_crumb.html' %}
+					{% endif %}
+				{% endwith %}
+			{% endblock breadcrumbs %}
+		  </ol>
+		</nav>
+		
 		{% include 'messages.html' %}
 		{% block content %}{% endblock content %}
 	</div>

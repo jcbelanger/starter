@@ -1,52 +1,62 @@
 {% extends "base.html" %}
 {% load humanize %}
 {% load static %}
+{% load i18n %}
 
 
-{% block title %}{{ profile.user.username }} | Profiles | {{ block.super }}{% endblock %}
+{% block title %}{{ profile.user.username }} | {% trans 'Profiles' %} | {{ block.super }}{% endblock %}
+
+{% block breadcrumbs %}
+	{{ block.super }}
+	{% with crumb_text=_('Profiles')%}
+		{% url 'profiles:index' as crumb_link %}
+		{% include 'partials/parent_crumb.html' %}
+	{% endwith %}
+	{% with crumb_text=profile.user.username %}
+		{% include 'partials/current_crumb.html' %}
+	{% endwith %}
+{% endblock %}
 
 {% block content %}
-    <h1>
-        {% if profile.user.get_full_name %}
+    <h1>{% if profile.user.get_full_name %}
             {{ profile.user.get_full_name }} ({{ profile.user.username }})
         {% else %}
             {{ profile.user.username }}
-        {% endif %}
-    </h1>
+        {% endif %}</h1>
 	<div class='float-right'>
 	</div>
     <div class="container-fluid">
 		<div class="row">
 			{% if profile.image %}
 				<div class="col-sm">
-					<img class="img-fluid" src="{{ profile.image.url }}" alt="User profile image for {{ profile.user.username }}">
+					<img class="img-fluid" src="{{ profile.image.url }}" alt="{% blocktrans %}User profile image for {{ profile.user.username }}.{% endblocktrans %}">
 				</div>
 			{% endif %}
 			<div class="col-sm">
 				<dl class="row">
-					<dt class="col-sm-3 text-sm-right">Username</dt>
+					<dt class="col-sm-3 text-sm-right">{% trans 'Username' %}</dt>
 					<dd class="col-sm-9">{{ profile.user.username }}</dd>
 					{% if profile.user.get_full_name %}
-						<dt class="col-sm-3 text-sm-right">Name</dt>
+						<dt class="col-sm-3 text-sm-right">{% trans 'Name' %}</dt>
 						<dd class="col-sm-9">{{ profile.user.get_full_name }}</dd>
 					{% endif %}
-					<dt class="col-sm-3 text-sm-right">Status</dt>
+					<dt class="col-sm-3 text-sm-right">{% trans 'Status' %}</dt>
 					<dd class="col-sm-9">
 						{% if profile.user.is_superuser %}
-							<span class="badge badge-pill badge-primary">Superuser</span>
+							<span class="badge badge-pill badge-primary">{% trans 'Superuser' %}</span>
 						{% endif %}
 						{% if profile.user.is_staff %}
-							<span class="badge badge-pill badge-info">Staff</span>
+							<span class="badge badge-pill badge-info">{% trans 'Staff' %}</span>
 						{% endif %}
 						{% if profile.user.is_active %}
-							<span class="badge badge-pill badge-success">Active</span>
+							<span class="badge badge-pill badge-success">{% trans 'Active' %}</span>
 						{% else %}
-							<span class="badge badge-pill badge-danger">Inactive</span>
+							<span class="badge badge-pill badge-danger">{% trans 'Inactive' %}</span>
 						{% endif %}
 					</dd>
-					<dt class="col-sm-3 text-sm-right">Last Login</dt>
+					<dt class="col-sm-3 text-sm-right">{% trans 'Last Login' %}</dt>
 					<dd class="col-sm-9">{{ profile.user.last_login | naturaltime }}</dd>
-					<dt class="col-sm-3 text-sm-right">Joined</dt>
+					<dt class="col-sm-3 text-sm-right">{% trans 'Joined' %}</dt>
 					<dd class="col-sm-9">{{ profile.user.date_joined | naturaltime }}</dd>
 				</dl>
 			</div>

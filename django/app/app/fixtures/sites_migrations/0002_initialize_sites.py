@@ -7,19 +7,19 @@ from django.conf import settings
 def forward(apps, schema_editor):
     Site = apps.get_model("sites", "Site")
     db_alias = schema_editor.connection.alias
-    s, created = Site.objects.using(db_alias).get_or_create(pk=settings.SITE_ID)
-    s.name = settings.DOMAIN
-    s.domain = settings.DOMAIN
-    s.save()
+    site, created = Site.objects.using(db_alias).get_or_create(pk=settings.SITE_ID)
+    site.name = settings.DOMAIN
+    site.domain = settings.DOMAIN
+    site.save()
 
 
 def reverse(apps, schema_editor):
     Site = apps.get_model("sites", "Site")
     db_alias = schema_editor.connection.alias
-    s = Site.objects.using(db_alias).get(pk=settings.SITE_ID)
-    s.name = 'example.com'
-    s.domain = 'example.com'
-    s.save()
+    site = Site.objects.using(db_alias).get(pk=settings.SITE_ID)
+    site.name = 'example.com'
+    site.domain = 'example.com'
+    site.save()
 
 
 class Migration(migrations.Migration):
